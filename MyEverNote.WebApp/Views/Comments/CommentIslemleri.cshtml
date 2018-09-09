@@ -1,0 +1,82 @@
+﻿@model List<MyEverNote.Entities.Comment>
+@{
+    ViewBag.Title = "CommentIslemleri";
+}
+
+<script>
+    @ViewBag.calljavascriptfunction
+
+    function Popup() {
+        BootstrapDialog.show({
+            title: "Congratulations",
+            message: 'Comment işleminiz başarıyla gerçekleştirilmiştir.',
+            buttons: [{
+                label: 'Ok',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+
+        });
+    }
+
+    $(function () {
+
+        $("#likecmodal").on('show.bs.modal', function (e) {
+            var btn = $(e.relatedTarget);
+            var comid = btn.attr("data-comid");
+            $("#likecmodal_body").load("/Comments/CommentLikedUsers/" + comid);
+        });
+    });
+</script>
+
+<div class="container">
+    <h3>Comment İşlemleri</h3>
+    <hr />
+    @{
+        WebGrid grid = new WebGrid(
+            source: Model,
+            columnNames: new[] { "Text", "Note", "User", "Like Count" },
+            defaultSort: "Text",
+            rowsPerPage: 10,
+            canPage: true,
+            canSort: true,
+            pageFieldName: "pageno",
+            sortFieldName: "sort",
+            ajaxUpdateContainerId: "Grid"
+            );
+    }
+
+    <div class="row">
+        <div class="col-md-offset-11">
+            <a href="~/Comments/AddorEdit" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span>Add Comment</a>
+        </div>
+    </div>
+    <div class="row">
+
+        @grid.GetHtml(tableStyle: "table table-striped",
+fillEmptyRows:false,
+mode:WebGridPagerModes.All,
+numericLinksCount:3,
+columns: grid.Columns
+     (
+    grid.Column("Text", "Text"),
+    grid.Column("Note.Title", "Note"),
+    grid.Column("EverNoteUser.Username", "User"),
+    grid.Column(format: (item) => Html.ActionLink("Düzenle", "AddorEdit", "Comments", new { item.id }, new { id = "Duzenle"+item.id, @class = "glyphicon glyphicon-edit",style= "color:green" })),
+    grid.Column(format: (item) => Html.ActionLink("Sil", "Delete", "Comments", new { item.id }, new { id = "Sil" + item.id, @class = "glyphicon glyphicon-remove", style = "color:red" })),
+    grid.Column(format: @<text> <a style="color:red;" href="#" data-comid="@item.id" data-toggle="modal" data-target="#likecmodal">
+                <span class="glyphicon glyphicon-heart"></span>@item.LikeCount
+            </a></text>)
+               ),
+          htmlAttributes: new { id = "Grid" },
+          firstText: "[ilk]",
+          lastText: "[son]",
+          previousText: "[önceki]",
+          nextText: "[sonraki]"
+          )
+    </div>
+</div>
+
+
+@MyHelper.ModalPopup("likecmodal", "WhoLikes", true)

@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "About";
+}
+@*<link href="~/Content/MBAStyle.css" rel="stylesheet" />*@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Partial("_PartialCategories")
+        </div>
+        <div class="col-md-9">
+            <div class="row carousel-holder">
+                <div class="col-md-12">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img src="~/Images/7.jpg" width="830" height="300" />
+                            </div>
+                            <div class="item">
+                                <img src="~/Images/4.jpg" width="830" height="300" />
+                            </div>
+                            <div class="item">
+                                <img src="~/Images/9.png" width="830" height="300" />
+                            </div>
+                        </div>
+                        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h2><span class="glyphicon glyphicon-apple"></span>Who We Are</h2>
+            <div class="row">
+                <p>
+                    Ne yapmak gerek peki?
+                    Sağlam bir arka mı bulmalıyım?
+                    Onu mu bellemeliyim?
+                    Bir ağaç gövdesine dolanan sarmaşık gibi
+                    Önünde eğilerek efendimiz sanmak mı?
+                    Bilek gücü yerine dolanla tırmanmak mı?
+                    İstemem!
+                </p>
+                <p>
+                    Herkesin yaptığı şeyleri mi yapmalıyım Le Bret?
+                    Sonradan görmelere övgüler mi yazmalıyım?
+                    Bir bakanın yüzünü güldürmek için biraz şaklabanlık edip,
+                    Taklalar mı atmalıyım?
+                    İstemem! Eksik olsun!
+                </p>
+                <p>
+                    Her sabah kahvaltıda kurbağa mı yemeli?
+                    Sabah akşam dolaşıp pabuç mu eskitmeli?
+                    Onun bunun önünde hep boyun mu eğmeli?
+                    İstemem! Eksik olsun böyle bir şöhret!
+                    Eksik olsun!
+                </p>
+                <p>
+                    Ciğeri beş para etmezlere mi “yetenekli” demeli?
+                    Eleştiriden mi çekinmeli?
+                    “Adım Mercuré dergisinde geçse” diye mi sayıklamalı?
+                    İstemem!
+                    İstemem! Eksik olsun!
+                </p>
+                <p>
+                    Korkmak, tükenmek, bitmek…
+                    Şiir yazacak yerde eşe dosta gitmek.
+                    Dilekçeler yazarak içini ortaya dökmek?
+                    İstemem! Eksik olsun!
+                    İstemem! Eksik olsun!
+                </p>
+                <p>
+                    Ama şarkı söylemek, düşlemek, gülmek, yürümek…
+                    Tek başına…
+                    Özgür olmak…
+                    Dünyaya kendi gözlerinle bakmak…
+                    Sesini çınlatmak, aklına esince şapkanı yan yatırmak…
+                    Bir hiç uğruna kılıcına ya da kalemine sarılmak…
+                    Ne ün peşinde olmak, para pul düşünmek,
+                    İsteyince Ay’a bile gidebilmek.
+                    Başarıyı alnının teriyle elde edebilmek.
+                    Demek istediğim asalak bir sarmaşık olma sakın.
+                </p>
+                <p>
+                    <strong>
+                        Varsın boyun olmasın bir söğütünki kadar.
+                        Yaprakların bulutlara erişmezse bir zararın mı var?
+                    </strong>
+                </p>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+@section footer{
+    @Html.Partial("_PartialFooter")
+}

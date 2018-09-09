@@ -1,0 +1,25 @@
+﻿@using MyEverNote.Entities
+@using MyEverNote.WebApp.Models
+@model MyEverNote.Entities.Comment
+
+
+<ul class="list-unstyled">
+    @{
+
+
+        <li class="media">
+            <img src='~/Images/@Model.CommentOwner.ProfileImage' class='img-circle' width='50' height='50'>&nbsp;
+            <div class="media-body">
+                <h5 class="mt-0 mb-1">
+                    <strong>@Model.CommentOwner.Username</strong>
+                </h5>
+                <div>
+                    @Html.TextArea("comment", Model.Text, rows: 10, columns: 5, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </li>
+
+
+    }
+</ul>
+

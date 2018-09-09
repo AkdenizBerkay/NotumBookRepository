@@ -1,0 +1,81 @@
+﻿<div class="container" id="foot">
+    <hr>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h4><strong>Linkler</strong></h4>
+                    <hr />
+                    <p>
+                        <ul>
+
+                            <li class="list-group">
+                                <a class="nav-link" href="@Url.Action("Home", "Home")">
+                                    <span class=" glyphicon glyphicon-home"></span>
+                                    Anasayfa
+                                </a>
+                            </li>
+
+                            <li class="list-group">
+                                <a class="nav-link" href="@Url.Action("Home", "Home", new { mostlike = true })">
+                                    <span class=" glyphicon glyphicon-star"></span>
+                                    En Beğenilenler
+                                </a>
+                            </li>
+                            <li class="list-group">
+                                <a class="nav-link" href="@Url.Action("Home", "Home", new { lastnotes = true })">
+                                    <span class=" glyphicon glyphicon-th-list"></span>
+                                    Son Yazılar
+                                </a>
+                            </li>
+                            <li class="list-group">
+                                <a class="nav-link" href="/Home/About">
+                                    <span class=" glyphicon glyphicon-info-sign"></span>
+                                    Hakkımızda
+                                </a>
+                            </li>
+
+                        </ul>
+                    </p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4><strong>My Evernote</strong></h4>
+                    <hr />
+                    <ul>
+                        <li class="list-group">
+                        </li>
+                        <li class="list-group">
+                        </li>
+                        <li class="list-group">
+                        </li>
+                    </ul>
+                    <p class="m-0 text-center">Copyright &copy; My Evernote @DateTime.Now.Year</p>
+                </div>
+
+                <div class="col-md-4 text-center">
+                    <h4><strong>E-Bülten</strong></h4>
+                    <hr />
+                    <ul>
+                        <li class="list-group">
+                        </li>
+                        <li class="list-group">
+                        </li>
+                    </ul>
+                    <p>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text" placeholder="e-posta adresiniz" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">Gönder</button>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+    </footer>
+</div>

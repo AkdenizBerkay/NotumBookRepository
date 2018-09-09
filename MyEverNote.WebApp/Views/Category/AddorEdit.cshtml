@@ -1,0 +1,113 @@
+﻿@model MyEverNote.Entities.Category
+
+@{
+    ViewBag.Title = "AddorEdit";
+}
+
+<script>
+    @ViewBag.calljavascriptfunction
+
+    function Popup() {
+        BootstrapDialog.show({
+            title: "Congratulations",
+            message: 'Category işleminiz başarıyla gerçekleştirilmiştir.',
+            buttons: [{
+                label: 'Ok',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+
+        });
+    }
+</script>
+
+@using (Html.BeginForm("AddorEdit", "Category"))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="form-horizontal">
+            @if (Model.Id != 0)
+            {
+            <h2>Update Category</h2>
+            }
+            else
+            {
+            <h2>Add Category</h2>
+            }
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="row">
+                
+                <div class="col-md-7">
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Description, rows: 4, columns: 8, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+
+                    <div class="form-group noedit">
+                        @Html.LabelFor(model => model.CreateOn, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CreateOn, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CreateOn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group noedit">
+                        @Html.LabelFor(model => model.ModifieOn, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ModifieOn, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ModifieOn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group noedit">
+                        @Html.LabelFor(model => model.ModifiedUser, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ModifiedUser, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ModifiedUser, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.ActionLink("Back to Category İşlemleri", "CategoryIslemleri", null, new { @class = "btn btn-danger" })
+                </div>
+                <div class="col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('.noedit :input').attr('disabled', true
+        );
+    });
+</script>
+
+

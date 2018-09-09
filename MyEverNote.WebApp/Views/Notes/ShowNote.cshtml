@@ -1,0 +1,304 @@
+﻿@using MyEverNote.Entities
+@using MyEverNote.WebApp.Models
+@model MyEverNote.Entities.Note
+@{
+    ViewBag.Title = "ShowNote";
+
+    EverNoteUser suser = CurrentSession.User;
+
+}
+<script>
+        @ViewBag.calljavascriptfunction
+
+    function CommentPopup() {
+        BootstrapDialog.show({
+            title: "Congratulations",
+            message: 'Comment işleminiz başarıyla gerçekleştirilmiştir.',
+            buttons: [{
+                label: 'Ok',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+
+        });
+    }
+</script>
+<div class="container">
+    <h2>@Html.Raw(Model.Title)</h2>
+    <hr />
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-10">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span>@Model.EverNoteUser.Username</h3>
+                </div>
+                <div class="col-md-2">
+
+                    @if (suser != null && suser.Id == Model.OwnerId)
+                    {
+                        <a href="@Url.Action("AddorEdit", "Notes", new { id = Model.Id, adminpanel = false })" class="btn btn-success btn-sm">
+                            <span class="glyphicon glyphicon-edit"></span>Edit
+                        </a>
+                        <a href="@Url.Action("Delete", "Notes", new { id = Model.Id })" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove"></span>Delete
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <p>
+                @Html.Raw(Model.Text)
+            </p>
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2">
+                    <a class="btn-sm" id="MakeComment" href="#">
+                        <span class="glyphicon glyphicon-pencil"></span>Make Comment
+                    </a>
+                </div>
+                <div class="col-md-1">
+                    @if (suser != null)
+                    {
+                        <button id="likebutton" style="border: 0px solid; background-color:white;" onclick="likenote(this,@Model.Id);">
+
+                            @if (suser != null && Model.NoteLike.ToList().Exists(k => k.UserId == suser.Id) == false)
+                            {
+                                <span class="glyphicon glyphicon-heart-empty" style="color:red"></span>
+                            }
+                            else
+                            {
+                                <span class="glyphicon glyphicon-heart" style="color:red"></span>
+                            }
+                        </button>
+                    }
+                    else
+                    {
+                        <button style="border: 0px solid; background-color:white;">
+                            <span class="glyphicon glyphicon-heart-empty" style="color:red"></span>
+                        </button>
+                    }
+
+                    @if (suser != null)
+                    {
+                        <a id="likecount" style="margin-left:-10px;" href="#" class="btn-sm" onclick="WhoLikes()">
+                            @Model.LikeCount
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="margin-left:-10px;" href="#" class="btn-sm">
+                            @Model.LikeCount
+                        </a>
+                    }
+
+
+                </div>
+                <div class="col-md-1">
+                    <a id="ShoworHideComment" href="#" class="btn-sm">
+                        <span class="glyphicon glyphicon-comment" style="margin-right:3px"></span>@Model.Comment.ToList().Count
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("ShowNote", "Notes", FormMethod.Post))
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <div class="row" id="hidecomment">
+                <div class="col-md-12">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @if (suser != null)
+                                    {
+                                        <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span>@suser.Username</h3>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.TextArea("comment", "", rows: 16, columns: 5, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-offset-10">
+                                    <a class="btn btn-outline-danger btn-sm" id="DiscardComment">
+                                        <span class="glyphicon glyphicon-remove-sign"></span>Discard
+                                    </a>
+                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                        <span class="glyphicon glyphicon-send"></span>Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+    <div class="form-group">
+        <div class="row" id="dbcomments">
+            <div class="col-md-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>Note Comments</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.Partial("_PartialComments", Model.Comment.ToList())
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@MyHelper.ModalPopup("likemodal", "WhoLikes", true)
+
+@MyHelper.ModalPopup("commentlikemodal", "WhoLikes", true)
+
+<script>
+    var li = @ViewBag.likeislemi;
+
+    function likenote(btn, id) {
+
+
+            var span = btn.childNodes[1];
+
+            if (span.attributes.class.nodeValue == "glyphicon glyphicon-heart-empty") {
+                span.attributes.class.nodeValue = "glyphicon glyphicon-heart";
+
+
+                $.ajax({
+                    method: "POST",
+                    url: "/Notes/NoteLiked/" + id,
+                    //data: { text: txt }
+                }).done(function (data) {
+                    if (data.result == true) {
+                        window.location.reload();
+                        $("#likecount").text((parseInt($("#likecount").text()) + 1).toString());
+                    }
+                    else {
+                        alert("note like güncellenemedi");
+                    }
+                }).fail(function () {
+
+                    alert("sunucu baglantı hatası");
+                });
+            }
+            else {
+
+                span.attributes.class.nodeValue = "glyphicon glyphicon-heart-empty";
+                $.ajax({
+                    method: "POST",
+                    url: "/Notes/NoteLiked/" + id,
+                    //data: { text: txt }
+                }).done(function (data) {
+
+                    if (data.result) {
+                        window.location.reload();
+                        $("#likecount").text((parseInt($("#likecount").text()) - 1).toString());
+                    @*@Model=data.model;*@
+                    }
+                    else {
+                        alert("note like güncellenemedi");
+                    }
+                }).fail(function () {
+                    alert("sunucu baglantı hatası");
+                });
+            }
+
+    }
+
+    function WhoLikes() {
+
+            BootstrapDialog.show({
+
+                title: "Who Likes",
+                message: '<ul class="list-unstyled">@{foreach (NoteLike l in Model.NoteLike){<li class="media"><img src="~/Images/@l.EverNoteUser.ProfileImage" class="img-circle" width="50" height="50">&nbsp;<div class="media-body"><h5 class="mt-0 mb-1"><strong>@l.EverNoteUser.Username</strong></h5></div></li>}}</ul>',
+                buttons: [{
+                    label: 'Ok',
+                    cssClass: 'btn-primary',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+
+    }
+
+    $(function () {
+
+            $("#likemodal").on('show.bs.modal', function (e) {
+                var btn = $(e.relatedTarget);
+                var noteid = btn.attr("data-noteid");
+                $("#likemodal_body").load("/Notes/NoteLikedUsers/" + noteid);
+            });
+
+            $("#commentlikemodal").on('show.bs.modal', function (e) {
+                var btn = $(e.relatedTarget);
+                var noteid = btn.attr("data-noteid");
+                $("#commentlikemodal_body").load("/Comments/CommentLikedUsers/" + noteid);
+            });
+
+        if (li != null) {
+            if (li == true) {
+                document.getElementById('hidecomment').style.display = "none";
+                document.getElementById('dbcomments').style.display = "none"
+            }
+            else {
+                document.getElementById('hidecomment').style.display = "none";
+                document.getElementById('dbcomments').style.display = "none"
+            }
+        }
+        $("#MakeComment").click(function () {
+
+            document.getElementById('hidecomment').style.display = "block";
+
+        });
+        $("#DiscardComment").click(function () {
+            document.getElementById('hidecomment').style.display = "none";
+
+        });
+
+        $("#ShoworHideComment").click(function () {
+            var commnetsStatus = document.getElementById('dbcomments').style.display;
+
+            if (commnetsStatus == "block") {
+
+                document.getElementById('dbcomments').style.display = "none"
+            }
+            else {
+
+                document.getElementById('dbcomments').style.display = "block"
+            }
+
+        });
+
+    });
+</script>

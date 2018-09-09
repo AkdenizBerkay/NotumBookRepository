@@ -1,0 +1,121 @@
+﻿@model MyEverNote.Entities.Comment
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<script>
+
+                BootstrapDialog.show({
+            title: "Are You Sure?",
+        message: 'Comment Kaydınız Silinecektir.',
+        buttons: [{
+                label: 'Ok',
+            cssClass: 'btn-primary',
+            action: function(dialog) {
+                    var url = '@Url.Action("DeletePost", "Comments", new { id = "__id__" })';
+                    window.location.href = url.replace('__id__',@ViewBag.id);
+                    dialog.close();
+                }
+        }]
+
+    });
+
+
+</script>
+
+@using (Html.BeginForm("Delete", "Comments", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="form-horizontal">
+            <h2>Delete Comment</h2>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <h4 style="margin-top:-4px;margin-left:15px">Text</h4>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Text, rows: 16, columns: 5, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            
+                            @Html.DropDownListFor(k => k.Note.Id, new SelectList(ViewBag.Notelar, "Value", "Text"), "Lütfen Seçiniz.", new { @class = "dropdown form-control", style = "height:100%" })
+                            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LikeCount, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.LikeCount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LikeCount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EverNoteUser, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(k => k.OwnerId, new SelectList(ViewBag.Userlar, "Value", "Text"), "Lütfen Seçiniz.", new { @class = "dropdown form-control", style = "height:100%" })
+                            @Html.ValidationMessageFor(model => model.EverNoteUser, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="form-group" id="createon">
+                        @Html.LabelFor(model => model.CreateOn, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CreateOn, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CreateOn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group" id="modifiedon">
+                        @Html.LabelFor(model => model.ModifieOn, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ModifieOn, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ModifieOn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group" id="modifieduser">
+                        @Html.LabelFor(model => model.ModifiedUser, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ModifiedUser, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ModifiedUser, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.ActionLink("Back to Comment İşlemleri", "CommentIslemleri", null, new { @class = "btn btn-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('div :input').attr('disabled', true);
+        $('.btn').attr('disabled', false);
+    });
+</script>

@@ -1,0 +1,74 @@
+﻿@using MyEverNote.WebApp.UIHelper
+@model List<MyEverNote.Entities.EverNoteUser>
+@{
+    ViewBag.Title = "UserIslemleri";
+}
+
+<script>
+    @ViewBag.calljavascriptfunction
+
+    function Popup() {
+        BootstrapDialog.show({
+            title: "Congratulations",
+            message: 'User işleminiz başarıyla gerçekleştirilmiştir.',
+            buttons: [{
+                label: 'Ok',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+
+        });
+    }
+
+</script>
+
+<div class="container">
+    <h3>User İşlemleri</h3>
+    <hr />
+    @{
+        WebGrid grid = new WebGrid(
+            source: Model,
+            columnNames: new[] { "ProfileImage", "Name", "Surname", "Username", "Email", "Password", "IsAdmin", "IsActive" },
+            defaultSort: "Username",
+            rowsPerPage: 10,
+            canPage: true,
+            canSort: true,
+            pageFieldName: "pageno",
+            sortFieldName: "sort",
+            ajaxUpdateContainerId: "Grid"
+            );
+    }
+    <div class="row">
+        <div class="col-md-offset-11">
+            <a href="~/EverNoteUsers/AddorEdit" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span>Add User</a>
+        </div>
+    </div>
+    <div class="row">
+        @grid.GetHtml(tableStyle: "table table-striped",
+fillEmptyRows: false,
+mode: WebGridPagerModes.All,
+numericLinksCount: 3,
+columns: grid.Columns
+                          (
+grid.Column(columnName: "ProfileImage", format:@<img src='~/Images/@item.ProfileImage' class='img-circle' alt='@item.Username' width='50' height='50'>),
+grid.Column("Name", "Name"),
+grid.Column("Surname", "Surname"),
+grid.Column("Username", "Username"),
+grid.Column("Email", "Email"),
+grid.Column("Password", "Password"),
+grid.Column("IsAdmin", "IsAdmin"),
+grid.Column("IsActive", "IsActive"),
+grid.Column(format: (item) => Html.ActionLink("Notes", "NoteIslemleri", "Notes", new { userid = item.id }, new { id = "Note" + item.id, @class = "glyphicon glyphicon-cloud", style = "color:purple" })),
+grid.Column(format: (item) => Html.ActionLink("Comments", "CommentIslemleri", "Comments", new { userid = item.id }, new { id = "Comment" + item.id, @class = "glyphicon glyphicon-comment", style = "color:blue" })),
+grid.Column(format: (item) => Html.ActionLink("Düzenle", "AddorEdit", "EverNoteUsers", new { item.id }, new { id = "Duzenle" + item.id, @class = "glyphicon glyphicon-edit", style = "color:green" })),
+grid.Column(format: (item) => Html.ActionLink("Sil", "Delete", "EverNoteUsers", new { item.id }, new { id = "Sil" + item.id, @class = "glyphicon glyphicon-remove", style = "color:red" }))
+),
+htmlAttributes: new { id = "Grid" },
+firstText: "[ilk]",
+lastText: "[son]",
+previousText: "[önceki]",
+nextText: "[sonraki]"
+)
+    </div>
+</div>

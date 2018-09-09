@@ -1,0 +1,604 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NoteBookModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifieOn" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LikeCount" Type="int" />
+          <Property Name="OwnerId" Type="int" Nullable="false" />
+          <Property Name="NoteId" Type="int" Nullable="false" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifieOn" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CommentLike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CommentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EverNoteUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsAdmin" Type="bit" />
+          <Property Name="ActivateGuid" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProfileImage" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifieOn" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LikeCount" Type="int" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="OwnerId" Type="int" Nullable="false" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifieOn" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CreateOn" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NoteLike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="NoteId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Comment_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Note">
+          <End Role="Note" Type="Self.Note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Note">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="NoteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommentLike_Comment">
+          <End Role="Comment" Type="Self.Comment" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CommentLike" Type="Self.CommentLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CommentLike">
+              <PropertyRef Name="CommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommentLike_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1" />
+          <End Role="CommentLike" Type="Self.CommentLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CommentLike">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Note_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Note_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NoteLike_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1" />
+          <End Role="NoteLike" Type="Self.NoteLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NoteLike">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NoteLike_Note">
+          <End Role="Note" Type="Self.Note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NoteLike" Type="Self.NoteLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Note">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NoteLike">
+              <PropertyRef Name="NoteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NoteBookModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommentLike" EntityType="Self.CommentLike" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EverNoteUser" EntityType="Self.EverNoteUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Note" EntityType="Self.Note" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NoteLike" EntityType="Self.NoteLike" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comment_EverNoteUser" Association="Self.FK_Comment_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Note" Association="Self.FK_Comment_Note">
+            <End Role="Note" EntitySet="Note" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommentLike_Comment" Association="Self.FK_CommentLike_Comment">
+            <End Role="Comment" EntitySet="Comment" />
+            <End Role="CommentLike" EntitySet="CommentLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommentLike_EverNoteUser" Association="Self.FK_CommentLike_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="CommentLike" EntitySet="CommentLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Note_Category" Association="Self.FK_Note_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Note_EverNoteUser" Association="Self.FK_Note_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NoteLike_EverNoteUser" Association="Self.FK_NoteLike_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="NoteLike" EntitySet="NoteLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NoteLike_Note" Association="Self.FK_NoteLike_Note">
+            <End Role="Note" EntitySet="Note" />
+            <End Role="NoteLike" EntitySet="NoteLike" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NoteBookModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateOn" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Note" Relationship="Self.FK_Note_Category" FromRole="Category" ToRole="Note" />
+          <Property Name="ModifieOn" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LikeCount" Type="Int32" />
+          <Property Name="OwnerId" Type="Int32" Nullable="false" />
+          <Property Name="NoteId" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateOn" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="EverNoteUser" Relationship="Self.FK_Comment_EverNoteUser" FromRole="Comment" ToRole="EverNoteUser" />
+          <NavigationProperty Name="Note" Relationship="Self.FK_Comment_Note" FromRole="Comment" ToRole="Note" />
+          <NavigationProperty Name="CommentLike" Relationship="Self.FK_CommentLike_Comment" FromRole="Comment" ToRole="CommentLike" />
+          <Property Name="ModifieOn" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="CommentLike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CommentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Comment" Relationship="Self.FK_CommentLike_Comment" FromRole="CommentLike" ToRole="Comment" />
+          <NavigationProperty Name="EverNoteUser" Relationship="Self.FK_CommentLike_EverNoteUser" FromRole="CommentLike" ToRole="EverNoteUser" />
+        </EntityType>
+        <EntityType Name="EverNoteUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsAdmin" Type="Boolean" />
+          <Property Name="ActivateGuid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProfileImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateOn" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Comment" Relationship="Self.FK_Comment_EverNoteUser" FromRole="EverNoteUser" ToRole="Comment" />
+          <NavigationProperty Name="CommentLike" Relationship="Self.FK_CommentLike_EverNoteUser" FromRole="EverNoteUser" ToRole="CommentLike" />
+          <NavigationProperty Name="Note" Relationship="Self.FK_Note_EverNoteUser" FromRole="EverNoteUser" ToRole="Note" />
+          <NavigationProperty Name="NoteLike" Relationship="Self.FK_NoteLike_EverNoteUser" FromRole="EverNoteUser" ToRole="NoteLike" />
+          <Property Name="ModifieOn" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LikeCount" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="OwnerId" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifieOn" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CreateOn" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Note_Category" FromRole="Note" ToRole="Category" />
+          <NavigationProperty Name="Comment" Relationship="Self.FK_Comment_Note" FromRole="Note" ToRole="Comment" />
+          <NavigationProperty Name="EverNoteUser" Relationship="Self.FK_Note_EverNoteUser" FromRole="Note" ToRole="EverNoteUser" />
+          <NavigationProperty Name="NoteLike" Relationship="Self.FK_NoteLike_Note" FromRole="Note" ToRole="NoteLike" />
+        </EntityType>
+        <EntityType Name="NoteLike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="NoteId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EverNoteUser" Relationship="Self.FK_NoteLike_EverNoteUser" FromRole="NoteLike" ToRole="EverNoteUser" />
+          <NavigationProperty Name="Note" Relationship="Self.FK_NoteLike_Note" FromRole="NoteLike" ToRole="Note" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Note_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Note">
+          <End Role="Note" Type="Self.Note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Note">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="NoteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommentLike_Comment">
+          <End Role="Comment" Type="Self.Comment" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CommentLike" Type="Self.CommentLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CommentLike">
+              <PropertyRef Name="CommentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommentLike_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1" />
+          <End Role="CommentLike" Type="Self.CommentLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CommentLike">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Note_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NoteLike_EverNoteUser">
+          <End Role="EverNoteUser" Type="Self.EverNoteUser" Multiplicity="1" />
+          <End Role="NoteLike" Type="Self.NoteLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EverNoteUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NoteLike">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NoteLike_Note">
+          <End Role="Note" Type="Self.Note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="NoteLike" Type="Self.NoteLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Note">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NoteLike">
+              <PropertyRef Name="NoteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NoteBookEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" />
+          <EntitySet Name="CommentLike" EntityType="Self.CommentLike" />
+          <EntitySet Name="EverNoteUser" EntityType="Self.EverNoteUser" />
+          <EntitySet Name="Note" EntityType="Self.Note" />
+          <EntitySet Name="NoteLike" EntityType="Self.NoteLike" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_Note_Category" Association="Self.FK_Note_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_EverNoteUser" Association="Self.FK_Comment_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Note" Association="Self.FK_Comment_Note">
+            <End Role="Note" EntitySet="Note" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommentLike_Comment" Association="Self.FK_CommentLike_Comment">
+            <End Role="Comment" EntitySet="Comment" />
+            <End Role="CommentLike" EntitySet="CommentLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommentLike_EverNoteUser" Association="Self.FK_CommentLike_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="CommentLike" EntitySet="CommentLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Note_EverNoteUser" Association="Self.FK_Note_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NoteLike_EverNoteUser" Association="Self.FK_NoteLike_EverNoteUser">
+            <End Role="EverNoteUser" EntitySet="EverNoteUser" />
+            <End Role="NoteLike" EntitySet="NoteLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NoteLike_Note" Association="Self.FK_NoteLike_Note">
+            <End Role="Note" EntitySet="Note" />
+            <End Role="NoteLike" EntitySet="NoteLike" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NoteBookModelStoreContainer" CdmEntityContainer="NoteBookEntities">
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="NoteBookModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ModifieOn" ColumnName="ModifieOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comment">
+            <EntityTypeMapping TypeName="NoteBookModel.Comment">
+              <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="ModifieOn" ColumnName="ModifieOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="LikeCount" ColumnName="LikeCount" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommentLike">
+            <EntityTypeMapping TypeName="NoteBookModel.CommentLike">
+              <MappingFragment StoreEntitySet="CommentLike">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EverNoteUser">
+            <EntityTypeMapping TypeName="NoteBookModel.EverNoteUser">
+              <MappingFragment StoreEntitySet="EverNoteUser">
+                <ScalarProperty Name="ModifieOn" ColumnName="ModifieOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="ActivateGuid" ColumnName="ActivateGuid" />
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Note">
+            <EntityTypeMapping TypeName="NoteBookModel.Note">
+              <MappingFragment StoreEntitySet="Note">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="LikeCount" ColumnName="LikeCount" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifieOn" ColumnName="ModifieOn" />
+                <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NoteLike">
+            <EntityTypeMapping TypeName="NoteBookModel.NoteLike">
+              <MappingFragment StoreEntitySet="NoteLike">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="NoteBookModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

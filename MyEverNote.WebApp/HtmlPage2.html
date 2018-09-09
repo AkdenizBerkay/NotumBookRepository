@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html ng-app="ilkUygulama">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <script type="text/javascript" src=" https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/i18n/angular-locale_tr-tr.js"></script>
+
+    <script type="text/javascript">
+        var firstapp = angular.module("ilkUygulama", []);
+        firstapp.controller("ilkController", function ($scope) {
+            //$scope.name = "Berkay Akdeniz";
+        });
+        firstapp.controller("secondController", function ($scope) {
+            //$scope.name = "Berkay Akdeniz";
+        });
+        firstapp.controller("tableController", function ($scope) {
+            $scope.title = "İzle ve Öğren";
+            $scope.no = "12345";
+            $scope.city = "İstanbul";
+            $scope.products = [
+                {
+                    title: "Berkay Akdeniz",
+                    no: "1",
+                    city: "İstanbul",
+
+                },
+                {
+                    title: "Deniz Akdeniz",
+                    no: "12345",
+                    city: "Ankara"
+                },
+                {
+                    title: "Bahtiyar Akdeniz",
+                    no: "12345",
+                    city: "İstanbul"
+                },
+                {
+                    title: "İzle ve Öğren",
+                    no: "12345",
+                    city: "İstanbul"
+                },
+                {
+                    title: "Facebook",
+                    no: "12346",
+                    city: "Ankara"
+                }
+            ]
+        });
+
+        //firstapp.filter("changeLetter", function () {
+        //    return function (arg) {
+        //        return arg.replace("a", "A");
+        //    }
+        //})
+
+        firstapp.directive('firstDirective', function () {
+            return {
+                restrict: 'E',
+                templateUrl:'HtmlPage1.html'
+            }
+        });
+
+        firstapp.directive("secondDirective", function () {
+            return {
+                restrict: 'E',
+                template: "<div><p>Berkay Akdeniz</p></div>",
+                    link: function (scope, element) {
+                        element.bind('mouseover', function () {
+                            element.css('cursor', 'pointer');
+                        });
+                }
+            };
+        });
+
+        firstapp.controller("formController", function ($scope) {
+
+            var records = [
+                {
+                    reviews: [{
+                        stars: 1,
+                        contetnt: "Review 1",
+                        email: "review1@gmail.com"
+                    }]
+                },
+                {
+                    reviews: [{
+                        stars: 4,
+                        contetnt: "Review 4",
+                        email: "review4@gmail.com"
+                    }]
+                },
+                {
+                    reviews: [{
+                        stars: 3,
+                        contetnt: "Review 3",
+                        email: "review3@gmail.com"
+                    }]
+                },
+                {
+                    reviews: [{
+                        stars: 2,
+                        contetnt: "Review 2",
+                        email: "review2@gmail.com"
+                    }]
+                }
+            ];
+
+                $scope.uruns = records;
+                $scope.review = {
+                    reviews: []
+                };
+
+                $scope.addReview = function (urun) {
+                    $scope.review.reviews.push(urun);
+                    $scope.uruns.push($scope.review);
+                    $scope.reviews = {};
+                };
+
+              
+            });
+ 
+    </script>
+    <style>
+        .ng-invalid.ng-dirty{
+            border-color:red;
+        }
+        .ng-pristine{
+            border-color:darkorange;
+        }
+        .ng-valid.ng-dirty {
+            border-color: green;
+        }
+        .bold{
+            font-weight:bold;
+        }
+        .strike{
+            text-decoration:line-through;
+        }
+        .has-error{
+            color:red;
+            background-color:yellow;
+        }
+    </style>
+</head>
+<body>
+     <second-directive></second-directive>
+    <!--<div ng-controller="ilkController">
+        <div>
+            <label>{{name}}</label>
+            <input ng-model="name" />
+        </div>
+        <div ng-controller="secondController">
+            <label>{{name}}</label>
+            <input ng-model="name" />
+        </div>
+    </div>-->
+    <!--<div class="container" ng-controller="tableController">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+
+                    <th>Başlık</th>
+                    <th>No</th>
+                    <th>Şehir</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in products |limitTo:3 |orderBy:'-city'">
+                    <td class="active"></td>
+                    <td class="active">{{product.title}}</td>
+                    <td class="active">{{product.no | currency:'TL':0}}</td>
+                    <td class="active">{{product.city | changeLetter}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>-->
+
+    <div class="container" ng-controller="formController">
+
+        <h4>Ön İzlemeler</h4>
+        <div ng-repeat="urun in uruns">
+            <ul>
+                <li ng-repeat="review in urun.reviews">
+                    <blockquote>
+                        <strong>{{review.stars}} Stars</strong>
+                        {{review.contetnt}}
+                        <div class="clearfix">{{review.email}}</div>
+                    </blockquote>
+                </li>
+            </ul>
+        </div>
+        <form name="reviewForm" ng-submit="reviewForm.$valid && addReview(review)" novalidate>
+
+            <div ng-if="html">
+                <first-directive></first-directive>
+            </div>
+            <div class="row">
+                <strong>Derece: </strong>{{review.stars}}
+            </div>
+            <div class="row">
+                <strong>İçerik: </strong>{{review.contetnt}}
+            </div>
+            <div class="row">
+                <strong>email: </strong>{{review.email}}
+            </div>
+            <div class="row">
+                <strong>Html Page: </strong><input type="checkbox" name="chk" ng-model="html" />
+                <strong>Üstü Çizili: </strong><input type="checkbox" name="chkciz" ng-model="ciz" />
+                <strong>Kalın: </strong><input type="checkbox" name="chkkalin" ng-model="kalin" />
+                <strong>Hatalı: </strong><input type="checkbox" name="chkerror" ng-model="error" />
+            </div>
+            <div class="row">
+                <select class="form-control" ng-model="review.stars" required>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <textarea class="form-control" rows="3" ng-model="review.contetnt" required></textarea>
+                <input type="text" class="form-control" ng-model="review.email" placeholder="Email" required />
+            </div>
+            <div>
+                <p ng-class="{strike:ciz,bold:kalin,'has-error':error}">reviewForm is {{reviewForm.$valid}}</p>
+            </div>
+            <input type="submit" value="Gönder" />
+        </form>
+    </div>
+    <hr />
+
+</body>
+</html>

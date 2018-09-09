@@ -1,0 +1,193 @@
+﻿@using MyEverNote.Entities
+@using MyEverNote.WebApp.Models
+
+@model List<Note>
+
+<div class="row">
+
+    @{
+        foreach (Note n in Model)
+        {
+
+
+            if (Model.Count == 2)
+            {
+                <div class="col-sm-6 col-lg-6 col-md-6">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/320x150" alt="">
+                        <div>
+                            <h4>
+
+                                @Html.ActionLink(n.Title, "ShowNote", controllerName: "Notes", routeValues: new { n.Id }, htmlAttributes: null)
+
+                            </h4>
+                        </div>
+                        <div>
+                            <h6>
+                                <span class="glyphicon glyphicon-time"></span>@n.ModifieOn.ToString("dd.MM.yy HH:mm")<br />
+                            </h6>
+                            <a href="/Home/UserProfile/@n.OwnerId">
+                                <h6 style="color:black"><span class="glyphicon glyphicon-user"></span>@n.EverNoteUser.Username </h6>
+                            </a><hr />
+
+                            @if (@n.Text.Length > 120)
+                            {
+                                <p>
+                                    @(n.Text.Substring(0, 120) + " ...")
+                                </p>
+                            }
+                            else
+                            {<p>
+                                    @n.Text
+                                </p>
+                            }
+
+                        </div>
+                        <br />
+                        <div class="ratings">
+                            <p class="pull-right">
+                                <button type="button" class="btn btn-default" data-comid="@n.Id" data-toggle="modal" data-target="#commentmodal">
+                                    <span class="glyphicon glyphicon-comment">
+                                        Comments
+                                    </span>
+                                </button>
+                            </p>
+                            <p>
+                                <button type="button" class="btn btn-default" data-noteid="@n.Id" data-toggle="modal" data-target="#notelikemodal">
+                                    <span class="glyphicon glyphicon-star-empty"></span>@n.LikeCount
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.Count == 1)
+            {
+                <div class="col-sm-12 col-lg-12 col-md-12">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/320x150" alt="">
+                        <div>
+                            <h4>
+
+                                @Html.ActionLink(n.Title, "ShowNote", controllerName: "Notes", routeValues: new { n.Id }, htmlAttributes: null)
+
+                            </h4>
+                        </div>
+                        <div>
+                            <h6>
+                                <span class="glyphicon glyphicon-time"></span>@n.ModifieOn.ToString("dd.MM.yy HH:mm")<br />
+                            </h6>
+                            <a href="/Home/UserProfile/@n.OwnerId">
+                                <h6 style="color:black"><span class="glyphicon glyphicon-user"></span>@n.EverNoteUser.Username </h6>
+                            </a><hr />
+
+                            @if (@n.Text.Length > 120)
+                            {
+                                <p>
+                                    @(n.Text.Substring(0, 120) + " ...")
+                                </p>
+                            }
+                            else
+                            {<p>
+                                    @n.Text
+                                </p>
+                            }
+
+                        </div>
+                        <br />
+                        <div class="ratings">
+                            <p class="pull-right">
+                                <button type="button" class="btn btn-default" data-comid="@n.Id" data-toggle="modal" data-target="#commentmodal">
+                                    <span class="glyphicon glyphicon-comment">
+                                        Comments
+                                    </span>
+                                </button>
+                            </p>
+                            <p>
+                                <button type="button" class="btn btn-default" data-noteid="@n.Id" data-toggle="modal" data-target="#notelikemodal">
+                                    <span class="glyphicon glyphicon-star-empty"></span>@n.LikeCount
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="thumbnail">
+                        <img src="~/Images/n1.jpg" />
+                        <div>
+                            <h4>
+
+                                @Html.ActionLink(n.Title, "ShowNote", controllerName: "Notes", routeValues: new { n.Id }, htmlAttributes: null)
+
+                            </h4>
+                        </div>
+                        <div>
+                            <h6>
+                                <span class="glyphicon glyphicon-time"></span>@n.ModifieOn.ToString("dd.MM.yy HH:mm")<br />
+                            </h6>
+                            <a href="/Home/UserProfile/@n.OwnerId">
+                                <h6 style="color:black"><span class="glyphicon glyphicon-user"></span>@n.EverNoteUser.Username </h6>
+                            </a><hr />
+
+                            @if (@n.Text.Length > 120)
+                            {
+                                <p>
+                                    @(n.Text.Substring(0, 120) + " ...")
+                                </p>
+                            }
+                            else
+                            {<p>
+                                    @n.Text
+                                </p>
+                            }
+
+                        </div>
+                        <br />
+                        @if (CurrentSession.User != null)
+                        {
+                            <div class="ratings">
+                                <p class="pull-right">
+                                    <button type="button" class="btn btn-default" data-comid="@n.Id" data-toggle="modal" data-target="#commentmodal">
+                                        <span class="glyphicon glyphicon-comment">
+                                            Comments
+                                        </span>
+                                    </button>
+                                </p>
+                                <p>
+                                    <button type="button" class="btn btn-default" data-noteid="@n.Id" data-toggle="modal" data-target="#notelikemodal">
+                                        <span class="glyphicon glyphicon-star-empty"></span>@n.LikeCount
+                                    </button>
+                                </p>
+                            </div>
+                        }
+                    
+                    </div>
+                </div>
+            }
+        }
+
+    }
+</div>
+
+@MyHelper.ModalPopup("commentmodal", "Yorumlar", true)
+@MyHelper.ModalPopup("notelikemodal", "WhoLikes", true)
+<script>
+    $(function () {
+
+        $("#notelikemodal").on('show.bs.modal', function (e) {
+            var btn = $(e.relatedTarget);
+            var noteid = btn.attr("data-noteid");
+            $("#notelikemodal_body").load("/Notes/NoteLikedUsers/" + noteid);
+        });
+
+        $("#commentmodal").on('show.bs.modal', function (e) {
+            var btn = $(e.relatedTarget);
+            var noteid = btn.attr("data-comid");
+            $("#commentmodal_body").load("/Comments/ShowModalComment/" + noteid);
+        });
+
+    });
+</script>

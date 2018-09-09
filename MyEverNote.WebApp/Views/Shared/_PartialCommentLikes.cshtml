@@ -1,0 +1,24 @@
+﻿@using MyEverNote.Entities
+@using MyEverNote.WebApp.Models
+@model List<MyEverNote.Entities.CommentLike>
+
+
+<ul class="list-unstyled">
+    @{
+        foreach (CommentLike l in Model)
+        {
+
+            <li class="media">
+                <img src='~/Images/@l.EverNoteUser.ProfileImage' class='img-circle' width='50' height='50'>&nbsp;
+                <div class="media-body">
+
+                    <h5 class="mt-0 mb-1">
+                        <strong>@l.EverNoteUser.Username</strong>
+                    </h5>
+                </div>
+            </li>
+
+        }
+    }
+</ul>
+

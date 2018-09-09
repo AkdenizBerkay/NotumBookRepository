@@ -1,0 +1,67 @@
+﻿@using MyEverNote.WebApp.UIHelper
+@model List<MyEverNote.Entities.Category>
+@{
+    ViewBag.Title = "CategoryIslemleri";
+}
+
+<script>
+    @ViewBag.calljavascriptfunction
+
+    function Popup() {
+        BootstrapDialog.show({
+            title: "Congratulations",
+            message: 'Category işleminiz başarıyla gerçekleştirilmiştir.',
+            buttons: [{
+                label: 'Ok',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }]
+
+        });
+    }
+
+</script>
+
+<div class="container">
+    <h3>Category İşlemleri</h3>
+    <hr />
+    @{
+        WebGrid grid = new WebGrid(
+            source: Model,
+            columnNames: new[] { "Title", "Description" },
+            defaultSort: "Title",
+            rowsPerPage: 10,
+            canPage: true,
+            canSort: true,
+            pageFieldName: "pageno",
+            sortFieldName: "sort",
+            ajaxUpdateContainerId: "Grid"
+            );
+    }
+    <div class="row">
+        <div class="col-md-offset-11">
+            <a href="~/Category/AddorEdit" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span>Add Category</a>
+        </div>
+    </div>
+    <div class="row">
+        @grid.GetHtml(tableStyle: "table table-striped",
+fillEmptyRows:false,
+mode:WebGridPagerModes.All,
+numericLinksCount:3,
+columns: grid.Columns
+     (
+                      grid.Column("Title", "Title"),
+                      grid.Column("Description", "Description"),
+                      grid.Column(format: (item) => Html.ActionLink("Düzenle", "AddorEdit", "Category", new { item.id }, new { id = "Duzenle" + item.id, @class = "glyphicon glyphicon-edit", style = "color:green" })),
+                      grid.Column(format: (item) => Html.ActionLink("Sil", "Delete", "Category", new { item.id }, new { id = "Sil" + item.id, @class = "glyphicon glyphicon-remove", style = "color:red" })),
+                      grid.Column(format: (item) => Html.ActionLink("Notes", "NoteIslemleri", "Notes", new { catid = item.id }, new { id = "Comment" + item.id, @class = "glyphicon glyphicon-cloud", style = "color:purple" }))
+                      ),
+                  htmlAttributes: new { id = "Grid" },
+                  firstText: "[ilk]",
+                  lastText: "[son]",
+                  previousText: "[önceki]",
+                  nextText: "[sonraki]"
+                  )
+    </div>
+</div>

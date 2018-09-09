@@ -1,0 +1,190 @@
+﻿@using MyEverNote.Entities
+@using MyEverNote.WebApp.Models
+@model List<MyEverNote.Entities.Comment>
+
+
+<ul class="list-unstyled">
+    @{
+        List<CommentLike> CLikes = new List<CommentLike>();
+        foreach (Comment c in Model)
+        {
+            <li class="media">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img src='~/Images/@c.EverNoteUser.ProfileImage' style="margin-top:10px" class='img-circle' width='60' height='60'>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-left:-30px">
+                                        <div class="col-md-8" style="text-align:left">
+                                            <h5><strong>@c.EverNoteUser.Username</strong></h5>
+                                            </div>
+                                        <div class="col-md-offset-4" style="margin-top:10px" >
+                                            @if (CurrentSession.User != null && c.EverNoteUser.Id == CurrentSession.User.Id)
+                                            {
+                                                <button type="button" class="btn btn-xs btn-success" onclick="EditComment(@c.Id,'@c.Id-text')" style="border: 0px solid; height:50%">
+                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-danger" onclick="DeleteComment(@c.Id,'@c.Id-text')" style="border: 0px solid; height:50%">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="@c.Id-text" style="margin-bottom:20px">@c.Text</div><hr style="margin:0px" />
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-left:-30px">
+                                        <div class="col-md-8" style="text-align:left">
+                                            @c.ModifieOn
+                                        </div>
+                                        <div class="col-md-offset-4">
+                                            @if (c.CommentLike != null)
+                                            {
+                                                if (CurrentSession.User != null)
+                                                {
+                                                    if (c.CommentLike.ToList().Exists(k => k.UserId == CurrentSession.User.Id))
+                                                    {
+                                                        <button style="border: 0px solid; background-color:white;" onclick="likecomment(this,@c.Id,'@c.Id-text','@c.Id-likecount');">
+                                                            <span class="glyphicon glyphicon-heart" style="color:red"></span>
+                                                        </button>
+                                                        <a href="#" id="@c.Id-likecount" style="margin-left:-10px;" class="btn-sm">
+                                                            @c.LikeCount.ToString()
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <button style="border: 0px solid; background-color:white;" onclick="likecomment(this,@c.Id,'@c.Id-text','@c.Id-likecount');">
+                                                            <span class="glyphicon glyphicon-heart-empty" style="color:red"></span>
+                                                        </button>
+
+                                                        <a href="#" id="@c.Id-likecount" style="margin-left:-10px;" class="btn-sm">
+                                                            @c.LikeCount.ToString()
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <button style="border: 0px solid; background-color:white;">
+                                                        <span class="glyphicon glyphicon-heart-empty" style="color:red"></span>
+                                                    </button>
+                                                    <a href="#" style="margin-left:-10px;" class="btn-sm">
+                                                        @c.LikeCount.ToString()
+                                                    </a>
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </li>
+
+        }
+    }
+</ul>
+
+
+<script>
+
+    function EditComment(cid, txt) {
+        var oldcomment = $("#" + txt).text();
+        BootstrapDialog.show({
+
+            title: "Edit Your Comment",
+            message: '<textarea class="form-control" id="comment" name="comment" rows="10">' + oldcomment.trim() + '</textarea>',
+        buttons: [{
+                label: 'Save',
+            cssClass: 'btn-primary',
+            action: function (dialog) {
+                var newcomment = dialog.getModalBody().find('textarea').val();
+                var url = '@Url.Action("CommentEdit", "Comments", new { id = "__id__",txt= "__txt__" })';
+                url = url.replace('__id__', cid);
+                window.location.href = url.replace('__txt__', newcomment);
+                    dialog.close();
+                }
+        }]
+    });
+    }
+
+    function DeleteComment(cid,txt) {
+        var oldcomment = $("#"+txt).text();
+
+        BootstrapDialog.show({
+
+            title: "Delete Your Comment",
+            message: '<textarea class="form-control" id="comment" name="comment" rows="10" disabled>' + oldcomment.trim() + '</textarea>',
+        buttons: [{
+                label: 'Delete',
+            cssClass: 'btn-danger',
+            action: function (dialog) {
+                var url = '@Url.Action("CommentDelete", "Comments", new { id = "__id__"})';
+                window.location.href = url.replace('__id__', cid);
+                    dialog.close();
+                }
+        }]
+    });
+    }
+
+
+
+    function likecomment(btn, id, textid, likecountid) {
+            var span = btn.childNodes[1];
+
+            if (span.attributes.class.nodeValue == "glyphicon glyphicon-heart-empty") {
+                span.attributes.class.nodeValue = "glyphicon glyphicon-heart";
+                //document.getElementById(textid).contentEditable = true;
+                //document.getElementById(textid).className = "editable";
+
+
+                $.ajax({
+                    method: "POST",
+                    url: "/Comments/LikeComment/" + id,
+                    //data: { text: txt }
+                }).done(function (data) {
+
+                    if (data.result) {
+                        $("#" + likecountid).text((parseInt($("#" + likecountid).text()) + 1).toString());
+                    }
+                    else {
+                        alert("yorum güncellenemedi");
+                    }
+                }).fail(function () {
+
+                    alert("sunucu baglantı hatası");
+                });
+            }
+            else {
+
+                span.attributes.class.nodeValue = "glyphicon glyphicon-heart-empty";
+                $.ajax({
+                    method: "POST",
+                    url: "/Comments/UnLikeComment/" + id,
+                    //data: { text: txt }
+                }).done(function (data) {
+
+                    if (data.result) {
+                        $("#" + likecountid).text((parseInt($("#" + likecountid).text()) - 1).toString());
+                    }
+                    else {
+                        alert("yorum güncellenemedi");
+                    }
+                }).fail(function () {
+                    alert("sunucu baglantı hatası");
+                });
+            }
+        }
+
+
+</script>
+

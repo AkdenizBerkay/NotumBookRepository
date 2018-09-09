@@ -1,0 +1,19 @@
+﻿@using MyEverNote.WebApp.Models
+@using MyEverNote.Entities
+@{
+    var categories = CacheHelper.GetCategoriesFromCache();
+}
+
+
+<h3>Note Categories</h3>
+<div class="list-group">
+    <a href="/Home/Home" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>Tümü</a>
+
+    @foreach (var c in categories)
+    {
+        <a href="@Url.Action("Home","Home",new { id=c.Id })" class="list-group-item" title="@c.Description">
+            <span class="glyphicon glyphicon-arrow-right"></span>@c.Title
+        </a>
+    }
+
+</div>
