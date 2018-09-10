@@ -194,6 +194,7 @@
     <Content Include="Views\Comments\CommentIslemleri.cshtml" />
     <Content Include="Views\Comments\AddorEdit.cshtml" />
     <Content Include="Views\Comments\Delete.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
