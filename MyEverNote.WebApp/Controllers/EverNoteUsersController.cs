@@ -77,7 +77,7 @@ namespace MyEverNote.WebApp.Controllers
                     if (profileImage != null && (profileImage.ContentType.Equals("image/jpeg") || profileImage.ContentType.Equals("image/png") || profileImage.ContentType.Equals("image/jpg")))
                     {
                         string filename = $"user_{user.Username}.{profileImage.ContentType.Split('/')[1]}";
-                        profileImage.SaveAs(Server.MapPath($"~/Images/{filename}"));
+                        profileImage.SaveAs(Server.MapPath($"D:/vhosts/notumbook.site/httpdocs/Images/{filename}"));
                         user.ProfileImage = filename;
                     }
                     if (user.Id != 0)
