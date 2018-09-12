@@ -240,7 +240,7 @@ namespace MyEverNote.WebApp.Controllers
                 Manager<EverNoteUser> manager = new Manager<EverNoteUser>();
                 if (ModelState.IsValid)
                 {
-                    manager.Add(newuser);
+                    
                     ViewBag.Name = newuser.Username;
                     ViewBag.calljavascriptfunction = "Popup()";
                     List<string> mailaddress = new List<string>();
@@ -265,11 +265,12 @@ namespace MyEverNote.WebApp.Controllers
                     bool actmailresult = MailHelper.SendMail(html, mailaddress, "MyEverNote Application Activation Link");
                     if (actmailresult)
                     {
+                        manager.Add(newuser);
                         return View();
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Kaydınız başarıyla gerçekleşmiştir. Aktivasyon mailiniz biraz geçikebilir");
+                        ModelState.AddModelError("", "Kaydınız başarıyla gerçekleştirilememiştir.");
                         return View();
                     }
                 }
