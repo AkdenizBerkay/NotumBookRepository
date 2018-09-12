@@ -32,15 +32,18 @@ namespace MyEverNote.Common.Helper
                 message.Subject = subject;
                 message.IsBodyHtml = ishtml;
                 message.Body = body;
+                
+
 
                 var smpt = new SmtpClient(EncodeDecode.Decode(ConfigHelper.Get<string>("MailHost")),
                     Convert.ToInt32(EncodeDecode.Decode(ConfigHelper.Get<string>("MailPort"))));
-                smpt.EnableSsl = true;
+                //smpt.EnableSsl = true;
                 smpt.Credentials = new NetworkCredential(EncodeDecode.Decode(ConfigHelper.Get<string>("MailUser")),
                     EncodeDecode.Decode(ConfigHelper.Get<string>("MailPass")));
+
                 smpt.Send(message);
                 result = true;
-            }
+        }
             catch(Exception) {
                 
             }
