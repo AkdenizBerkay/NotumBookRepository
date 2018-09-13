@@ -62,7 +62,7 @@
             ajaxUpdateContainerId: "Grid"
             );
     }
-
+    
     <div class="row">
         <div class="col-md-offset-11">
             <a href="~/Notes/AddorEdit" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span>Add Note</a>
@@ -70,14 +70,15 @@
     </div>
     <div class="row">
 
-        @grid.GetHtml(tableStyle: "table table-striped",
+        @grid.GetHtml(
+tableStyle: "table table-striped",
 fillEmptyRows:false,
 mode:WebGridPagerModes.All,
 numericLinksCount:3,
 columns: grid.Columns
      (
     grid.Column("Title", "Title"),
-    grid.Column("Text", "Text"),
+    grid.Column("Text", "Text",format: item => item.Text.Substring(0,100)),
     grid.Column("Category.Title", "Category"),
     grid.Column("EverNoteUser.Username", "Owner"),
     grid.Column(format: (item) => Html.ActionLink("Düzenle", "AddorEdit", "Notes", new { item.id, adminpanel = true }, new { id = "Duzenle"+item.id, @class = "glyphicon glyphicon-edit",style= "color:green" })),
