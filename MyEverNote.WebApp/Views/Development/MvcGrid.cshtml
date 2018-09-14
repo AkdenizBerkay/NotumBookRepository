@@ -1,0 +1,37 @@
+﻿@using GridMvc.Html
+@model List<MyEverNote.Entities.Note>
+@{
+    ViewBag.Title = "MvcGrid";
+}
+
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<link href="~/Content/gridmvc.datepicker.min.css" rel="stylesheet" />
+<style>
+    select.form-control:not([size]):not([multiple]) {
+        height: calc(3.25rem + 2px);
+    }
+</style>
+
+
+<script src="~/Scripts/gridmvc.min.js"></script>
+<script src="~/Scripts/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/gridmvc.lang.tr.js"></script>
+<div class="container"><h2>MvcGrid</h2>
+    @Html.Grid(Model).Columns(col =>
+{
+
+    col.Add(k => k.Title).Titled("Not").Filterable(true);
+    //col.Add(k => k.Text);
+    col.Add(k => k.EverNoteUser.Username).Titled("Owner");
+    col.Add(k => k.Category.Title).Titled("Kategori");
+    col.Add(k => k.CreateOn).Filterable(true);
+    col.Add(k => k.LikeCount).Encoded(false).Sanitized(false).RenderValueAs(k => {
+        string like = "<span class='glyphicon glyphicon-heart' style='color:red'></span>" + k.LikeCount;
+        return MvcHtmlString.Create(like);
+    });
+    col.Add(k=>k.Id).Titled(" ").Sortable(false).Filterable(false).Encoded(false).Sanitized(false).RenderValueAs(html=>
+        Html.ActionLink("Düzenle", "AddorEdit", "Notes", new { html.Id, adminpanel = true }, new { id = "Duzenle" + html.Id, @class = "glyphicon glyphicon-edit btn btn-success"})).SetWidth(30);
+
+
+}).Sortable(true).WithPaging(5).SetLanguage("tr")
+</div>
