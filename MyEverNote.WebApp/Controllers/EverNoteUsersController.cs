@@ -155,7 +155,7 @@ namespace MyEverNote.WebApp.Controllers
             }
         }
 
-        [MustAdmin]
+        [MustLogin]
         public ActionResult Delete(int? id)
         {
             ViewBag.id = id.Value;
@@ -171,7 +171,7 @@ namespace MyEverNote.WebApp.Controllers
             return View(user);
         }
 
-        [MustAdmin]
+        [MustLogin]
         public ActionResult DeletePost(string id)
         {
             EverNoteUser duser = UserBusiness.GetById(Convert.ToInt32(id));

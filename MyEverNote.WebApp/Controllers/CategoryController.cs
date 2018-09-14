@@ -15,7 +15,7 @@ namespace MyEverNote.WebApp.Controllers
     public class CategoryController : Controller
     {
         Manager<Category> CategoryBusiness = new Manager<Category>();
-        
+
         public ActionResult CategoryIslemleri()
         {
             List<Category> Categories = CategoryBusiness.GetAll().ToList();
@@ -39,6 +39,7 @@ namespace MyEverNote.WebApp.Controllers
         }
 
         [HttpPost]
+
         [ValidateAntiForgeryToken]
         public ActionResult AddorEdit(Category category)
         {

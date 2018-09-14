@@ -15,6 +15,10 @@ namespace MyEverNote.WebApp.Filters
             {
                 filterContext.Result = new RedirectResult("/Home/Register");
             }
+            else if (CurrentSession.User == null)
+            {
+                filterContext.Result = new RedirectResult("/Home/Login");
+            }
         }
     }
 }

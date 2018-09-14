@@ -19,7 +19,7 @@ namespace MyEverNote.WebApp.Controllers
         Manager<Comment> CommentBusiness = new Manager<Comment>();
         Manager<NoteLike> LikeBusiness = new Manager<NoteLike>();
 
-        [MustAdmin]
+        [MustAdmin,MustLogin]
         public ActionResult NoteIslemleri(int? userid, int? catid)
         {
             ViewBag.calljavascriptfunction = TempData["calljavascriptfunction"];
