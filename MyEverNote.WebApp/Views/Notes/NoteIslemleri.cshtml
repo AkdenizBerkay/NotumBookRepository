@@ -52,7 +52,7 @@
     @{
         WebGrid grid = new WebGrid(
             source: Model,
-            columnNames: new[] { "Title", "Text", "Category", "Owner"},
+            columnNames: new[] { "Title", "Text", "Category", "Owner" },
             defaultSort: "Title",
             rowsPerPage: 10,
             canPage: true,
@@ -61,8 +61,10 @@
             sortFieldName: "sort",
             ajaxUpdateContainerId: "Grid"
             );
+        string d;
+        d.Length
     }
-    
+
     <div class="row">
         <div class="col-md-offset-11">
             <a href="~/Notes/AddorEdit" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span>Add Note</a>
@@ -78,15 +80,15 @@ numericLinksCount:3,
 columns: grid.Columns
      (
     grid.Column("Title", "Title"),
-    grid.Column("Text", "Text",format: item => item.Text.Substring(0,100)),
+    grid.Column("Text", "Text",format: item => item.Text.Length>100 ? item.Text.Substring(0,100):item.Text),
     grid.Column("Category.Title", "Category"),
     grid.Column("EverNoteUser.Username", "Owner"),
     grid.Column(format: (item) => Html.ActionLink("Düzenle", "AddorEdit", "Notes", new { item.id, adminpanel = true }, new { id = "Duzenle"+item.id, @class = "glyphicon glyphicon-edit",style= "color:green" })),
     grid.Column(format: (item) => Html.ActionLink("Sil", "Delete", "Notes", new { item.id }, new { id = "Sil" + item.id, @class = "glyphicon glyphicon-remove", style = "color:red" })),
     grid.Column(format: (item) => Html.ActionLink("Comments", "CommentIslemleri", "Comments", new {noteid= item.id }, new { id = "Comment" + item.id, @class = "glyphicon glyphicon-cloud", style = "color:blue" })),
     grid.Column(format: @<text> <a style="color:red;padding-right:5em" href="#" data-noteid="@item.id" data-toggle="modal" data-target="#likemodal">
-    <span class="glyphicon glyphicon-heart"></span>@item.LikeCount
-</a></text>)
+                <span class="glyphicon glyphicon-heart"></span>@item.LikeCount
+            </a></text>)
                ),
           htmlAttributes: new { id = "Grid" },
           firstText: "[ilk]",
