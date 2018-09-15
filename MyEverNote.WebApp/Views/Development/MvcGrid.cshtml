@@ -17,7 +17,7 @@
 <script src="~/Scripts/bootstrap-datepicker.js"></script>
 <script src="~/Scripts/gridmvc.lang.tr.js"></script>
 <div class="container"><h2>MvcGrid</h2>
-    @Html.Grid(Model).Columns(col =>
+    @Html.Grid(Model).Named("NotlarGrid").Columns(col =>
 {
 
     col.Add(k => k.Title).Titled("Not").Filterable(true);
@@ -30,8 +30,17 @@
         return MvcHtmlString.Create(like);
     });
     col.Add(k=>k.Id).Titled(" ").Sortable(false).Filterable(false).Encoded(false).Sanitized(false).RenderValueAs(html=>
-        Html.ActionLink("Düzenle", "AddorEdit", "Notes", new { html.Id, adminpanel = true }, new { id = "Duzenle" + html.Id, @class = "glyphicon glyphicon-edit btn btn-success"})).SetWidth(30);
+        Html.ActionLink("Düzenle", "AddorEdit", "Development", new { html.Id, adminpanel = true }, new { id = "Duzenle" + html.Id, @class = "glyphicon glyphicon-edit btn btn-success"})).SetWidth(30);
 
 
 }).Sortable(true).WithPaging(5).SetLanguage("tr")
 </div>
+
+
+<script>
+    $(function () {
+        pageGrids.NotlarGrid.onRowSelect = function (e) {
+            
+        }
+    })
+</script>

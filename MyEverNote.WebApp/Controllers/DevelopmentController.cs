@@ -18,5 +18,13 @@ namespace MyEverNote.WebApp.Controllers
             Notes = NoteBusiness.GetAll().ToList();
             return View(Notes);
         }
+
+        public ActionResult AddorEdit(int? id, bool? adminpanel)
+        {
+            List<Note> Notes = new List<Note>();
+            Manager<Note> NoteBusiness = new Manager<Note>();
+            Notes = NoteBusiness.GetAll().ToList();
+            return View(Notes);
+        }
     }
 }
