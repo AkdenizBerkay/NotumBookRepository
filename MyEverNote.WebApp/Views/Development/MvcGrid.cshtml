@@ -20,8 +20,8 @@
     @Html.Grid(Model).Named("NotlarGrid").Columns(col =>
 {
 
-    col.Add(k => k.Title).Titled("Not").Filterable(true);
-    //col.Add(k => k.Text);
+    col.Add(k => k.Title).Titled("Başlık").Filterable(true);
+    col.Add(k => k.Text).Titled("İçerik").RenderValueAs(k=>k.Text.Length>100?k.Text.Substring(0,100):k.Text);
     col.Add(k => k.EverNoteUser.Username).Titled("Owner");
     col.Add(k => k.Category.Title).Titled("Kategori");
     col.Add(k => k.CreateOn).Filterable(true);
@@ -35,12 +35,28 @@
 
 }).Sortable(true).WithPaging(5).SetLanguage("tr")
 </div>
-
+<div>
+    <span>Id: </span><span id="Id:"></span><br />
+    <span>Başlık: </span><span id="Title"></span><br />
+    <span>Not: </span><span id="Text"></span><br />
+    <span>Yazar: </span><span id="Owner"></span><br />
+    <span>Kategori: </span><span id="Category"></span><br />
+    <span>Tarih: </span><span id="Tarih"></span><br />
+    <span>Beğeni: </span><span id="LikeCount"></span><br />
+</div>
 
 <script>
     $(function () {
-        pageGrids.NotlarGrid.onRowSelect = function (e) {
-            
-        }
+        pageGrids.NotlarGrid.onRowSelect(function (e) {
+            var data = e.row;
+            var x = data[2];
+            $("#Id").text(data.Id);
+            $("#Title").text(data.Title);
+            $("#Text").text(data.Text);
+            $("#Owner").text(data["EverNoteUser.Username"]);
+            $("#Category").text(data["Category.Title"]);
+            $("#Tarih").text(data.CreateOn);
+            $("#LikeCount").text(data.LikeCount);
+        });
     })
 </script>
