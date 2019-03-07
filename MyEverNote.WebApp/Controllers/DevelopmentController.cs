@@ -26,5 +26,22 @@ namespace MyEverNote.WebApp.Controllers
             Notes = NoteBusiness.GetAll().ToList();
             return View(Notes);
         }
+
+        public ActionResult MvcGrid2()
+        {
+            return View();
+        }
+
+        public JsonResult CategoryDropBox()
+        {
+            Manager<Category> CategoryBusiness = new Manager<Category>();
+            List<Category> categories = CategoryBusiness.GetAll().ToList();
+            List<string> titles = new List<string>();
+            foreach (Category cat in categories)
+            {
+                titles.Add(cat.Title);
+            }
+            return Json(titles);
+        }
     }
 }

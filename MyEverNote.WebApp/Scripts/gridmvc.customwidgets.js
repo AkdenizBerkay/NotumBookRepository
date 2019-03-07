@@ -67,8 +67,8 @@ function CustomersFilterWidget() {
     */
     this.loadCustomers = function () {
         var $this = this;
-        $.post("/Home/GetCustomersNames", function (data) {
-            $this.fillCustomers(data.Items);
+        $.post("/Development/CategoryDropBox", function (data) {
+            $this.fillCustomers(data);
         });
     };
     /***

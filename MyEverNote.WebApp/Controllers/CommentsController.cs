@@ -13,7 +13,7 @@ namespace MyEverNote.WebApp.Controllers
 {
     public class CommentsController : Controller
     {
-        Manager<Comment> CommentBusiness = new Manager<Comment>();
+        Manager<Comment> CommentBusiness;
         Manager<EverNoteUser> UserBusiness = new Manager<EverNoteUser>();
         Manager<CommentLike> CommentLikedBusiness = new Manager<CommentLike>();
         Manager<Note> NoteBusiness = new Manager<Note>();
@@ -45,6 +45,7 @@ namespace MyEverNote.WebApp.Controllers
         [MustLogin]
         public ActionResult AddorEdit(int? id)
         {
+            Random r = new Random();
             Comment com = new Comment();
 
             if (id != null)

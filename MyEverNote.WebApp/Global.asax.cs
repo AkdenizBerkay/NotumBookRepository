@@ -1,4 +1,5 @@
 ﻿using MyEverNote.Common;
+using MyEverNote.WebApp.App_Start;
 using MyEverNote.WebApp.Init;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace MyEverNote.WebApp
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
+            MVCGridConfig.RegisterGrids();
             App.Common = new WebCommon();
         }
     }

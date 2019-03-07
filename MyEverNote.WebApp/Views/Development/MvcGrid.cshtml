@@ -1,4 +1,5 @@
 ﻿@using GridMvc.Html
+@using MVCGrid.Web
 @model List<MyEverNote.Entities.Note>
 @{
     ViewBag.Title = "MvcGrid";
@@ -16,14 +17,16 @@
 <script src="~/Scripts/gridmvc.min.js"></script>
 <script src="~/Scripts/bootstrap-datepicker.js"></script>
 <script src="~/Scripts/gridmvc.lang.tr.js"></script>
-<div class="container"><h2>MvcGrid</h2>
+<script src="~/Scripts/gridmvc.customwidgets.js"></script>
+<div class="container">
+    <h2>MvcGrid</h2>
     @Html.Grid(Model).Named("NotlarGrid").Columns(col =>
 {
 
     col.Add(k => k.Title).Titled("Başlık").Filterable(true);
     col.Add(k => k.Text).Titled("İçerik").RenderValueAs(k=>k.Text.Length>100?k.Text.Substring(0,100):k.Text);
     col.Add(k => k.EverNoteUser.Username).Titled("Owner");
-    col.Add(k => k.Category.Title).Titled("Kategori");
+    col.Add(k => k.Category.Title).Titled("Kategori").Filterable(true).SetFilterWidgetType("CustomCompanyNameFilterWidget");
     col.Add(k => k.CreateOn).Filterable(true);
     col.Add(k => k.LikeCount).Encoded(false).Sanitized(false).RenderValueAs(k => {
         string like = "<span class='glyphicon glyphicon-heart' style='color:red'></span>" + k.LikeCount;
@@ -35,7 +38,8 @@
 
 }).Sortable(true).WithPaging(5).SetLanguage("tr")
 </div>
-<div>
+
+<div class="container">
     <span>Id: </span><span id="Id:"></span><br />
     <span>Başlık: </span><span id="Title"></span><br />
     <span>Not: </span><span id="Text"></span><br />
@@ -44,6 +48,8 @@
     <span>Tarih: </span><span id="Tarih"></span><br />
     <span>Beğeni: </span><span id="LikeCount"></span><br />
 </div>
+
+<hr />
 
 <script>
     $(function () {
@@ -58,5 +64,7 @@
             $("#Tarih").text(data.CreateOn);
             $("#LikeCount").text(data.LikeCount);
         });
+
+        pageGrids.NotlarGrid.addFilterWidget(new CustomersFilterWidget());
     })
 </script>

@@ -38,7 +38,7 @@
 <div class="container">
     @using (Html.BeginForm("UserProfile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        @Html.HiddenFor(m => m.Id)
+        @*@Html.HiddenFor(m => m.Id)*@
         if (ViewBag.YazarId == null || (CurrentSession.User != null &&ViewBag.YazarId == CurrentSession.User.Id))
         {
             <h2>Profile</h2>

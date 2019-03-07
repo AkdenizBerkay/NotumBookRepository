@@ -9,9 +9,20 @@ using System.Threading.Tasks;
 
 namespace MyEverNote.BusinessLayer
 {
-    public class Manager<T> : IRepository<T>  where T : class
+    public class Manager<T> : IRepository<T> where T : class
     {
-        private EFRepository<T> cef = new EFRepository<T>();
+        private IRepository<T> cef;
+
+        public Manager()
+        {
+            cef = new EFRepository<T>();
+        }
+
+        public Manager(IRepository<T> OrmRepository)
+        {
+            cef = OrmRepository;
+        }
+
 
         public virtual void Add(T entity)
         {
