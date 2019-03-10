@@ -118,8 +118,8 @@
                             {
                                 <li class="nav-item">
                                     @{
-                                        //int id = (int)Session["loginuser"];
-                                        <a class="nav-link" href="/Home/UserProfile">
+                                        int id = ((MyEverNote.Entities.EverNoteUser)Session["loginuser"]).Id;
+                                        <a class="nav-link" href="/Home/UserProfile/@id">
                                             <span class="glyphicon glyphicon-user"></span>
 
                                             @user.Name
